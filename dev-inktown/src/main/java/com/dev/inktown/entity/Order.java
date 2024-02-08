@@ -39,5 +39,4 @@ public class Order {
     @UpdateTimestamp
     LocalDateTime lastModifiedAt;
 
-    LocalDateTime lastStatusModifiedAt;
 }

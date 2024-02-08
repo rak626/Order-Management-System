@@ -24,7 +24,7 @@ public class Order {
     @Column(columnDefinition = "Text")
     String orderDesc;
 
-    @Column(nullable = false, columnDefinition = "Integer default 0 ")
+    @Column(nullable = false)
     OrderStatus orderStatus;
 
     @Column(nullable = false)

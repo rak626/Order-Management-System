@@ -1,21 +1,22 @@
 package com.dev.inktown.model;
 
-public enum OrderStatus {
-    NEW(0),
-    ASSIGNED(1),
-    IN_PROGRESS(2),
-    COMPLETED(3),
-    DECLINED(4),
-    REVIEWED(5),
-    DELIVERED(6);
+import lombok.Getter;
 
+@Getter
+public enum OrderStatus {
+    DESIGN_PENDING(0),
+    DESIGN_PROGRESS(1),
+    PRINT_PENDING(2),
+    PRINT_PROGRESS(3),
+    PACKAGING_PENDING(4),
+    PACKAGING_PROGRESS(5),
+    READY_FOR_DELIVERY(6),
+    DISPATCHED(7),
+    DELIVERED(8);
     private final int internalId;
 
     OrderStatus(int id) {
         this.internalId = id;
     }
 
-    public int getInternalId() {
-        return internalId;
-    }
 }

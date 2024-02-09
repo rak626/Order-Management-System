@@ -2,26 +2,31 @@ package com.dev.inktown.entity;
 
 import com.dev.inktown.model.OrderStatus;
 import jakarta.persistence.*;
+import jakarta.transaction.TransactionScoped;
+import jakarta.transaction.Transactional;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "order_update_log")
+@Getter
+@Setter
 public class OrderUpdateLog {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @UuidGenerator
     @Column(unique = true, nullable = false)
     String id;
-    String orderID;
+    String orderId;
+    OrderStatus currentOrderStatus;
+    String updatedBy;
+    @CreationTimestamp
+    LocalDateTime createdAt;
 
-    LocalDateTime newAt;
-    LocalDateTime assignedAt;
-    LocalDateTime inProgressAt;
-    LocalDateTime  completedAt;
-    LocalDateTime  declinedAt;
-    LocalDateTime  reviewedAt;
-    LocalDateTime  deliveredAt;
 
 
 }

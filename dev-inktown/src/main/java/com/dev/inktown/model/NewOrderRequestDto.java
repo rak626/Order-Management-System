@@ -13,7 +13,7 @@ public class NewOrderRequestDto {
     private String customerEmail;
     private String orderDesc;
     private Long squareFeet;
-    private OrderStatus orderStatus;
+//    private OrderStatus orderStatus;
     private String orderName;
     private Boolean isUrgent;
 }

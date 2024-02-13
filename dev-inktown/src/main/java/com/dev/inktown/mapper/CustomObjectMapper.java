@@ -4,6 +4,7 @@ import com.dev.inktown.entity.Customer;
 import com.dev.inktown.entity.Order;
 import com.dev.inktown.entity.OrderUpdateLog;
 import com.dev.inktown.model.NewOrderRequestDto;
+import com.dev.inktown.model.OrderStatus;
 
 public class CustomObjectMapper {
 
@@ -19,7 +20,8 @@ public class CustomObjectMapper {
       public static Order OrderMapperFromNewOrderRequestDto(NewOrderRequestDto reqDto){
           Order order = new Order();
           order.setSquareFeet(reqDto.getSquareFeet());
-          order.setOrderStatus(reqDto.getOrderStatus());
+//          order.setOrderStatus(reqDto.getOrderStatus());
+          order.setOrderStatus(OrderStatus.DESIGN_PENDING);
           if(reqDto.getOrderDesc()!=null){
               order.setOrderDesc(reqDto.getOrderDesc());
           }

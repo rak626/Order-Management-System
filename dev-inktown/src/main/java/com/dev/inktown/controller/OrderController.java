@@ -1,15 +1,14 @@
 package com.dev.inktown.controller;
 
 import com.dev.inktown.entity.Order;
+import com.dev.inktown.model.DisplayStatusResp;
 import com.dev.inktown.model.NewOrderRequestDto;
 import com.dev.inktown.model.UpdateOrderStatusReqDto;
 import com.dev.inktown.service.OrderService;
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,5 +41,10 @@ public class OrderController {
     public ResponseEntity<Order> updateOrderStatus(@RequestBody UpdateOrderStatusReqDto reqDto){
         System.out.println("prev123" + reqDto.getStatus());
         return ResponseEntity.ok(orderService.updateOrderStatus(reqDto));
+    }
+
+    @GetMapping("/getDisplayStatusList")
+    public List<DisplayStatusResp> getDisplayStatusList(){
+        return orderService.getDisplayStatusList();
     }
 }

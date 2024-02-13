@@ -1,19 +1,21 @@
 package com.dev.inktown.service;
 
 import com.dev.inktown.constant.StringConstant;
-import com.dev.inktown.entity.OrderUpdateLog;
-import com.dev.inktown.mapper.CustomObjectMapper;
 import com.dev.inktown.entity.Customer;
 import com.dev.inktown.entity.Order;
+import com.dev.inktown.entity.OrderUpdateLog;
+import com.dev.inktown.mapper.CustomObjectMapper;
+import com.dev.inktown.model.DisplayStatusResp;
 import com.dev.inktown.model.NewOrderRequestDto;
+import com.dev.inktown.model.OrderStatus;
 import com.dev.inktown.model.UpdateOrderStatusReqDto;
 import com.dev.inktown.repository.OrderRepository;
-import com.dev.inktown.repository.OrderUpdateLogRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,4 +68,24 @@ public class OrderService implements StringConstant {
         return new Order();
     }
 
+    public List<DisplayStatusResp> getDisplayStatusList(){
+        List<DisplayStatusResp> res = new ArrayList<>();
+        for(OrderStatus os:OrderStatus.values()){
+            DisplayStatusResp obj = new DisplayStatusResp();
+            obj.setOrderStatus(os.getInternalId());
+            switch (os){
+                case DESIGN_PENDING -> obj.setDisplayValue("In Design queue");
+                case DESIGN_PROGRESS -> obj.setDisplayValue("Design is in progress");
+                case PRINT_PENDING -> obj.setDisplayValue("In Printing queue");
+                case PRINT_PROGRESS -> obj.setDisplayValue("Printing in progress");
+                case PACKAGING_PENDING -> obj.setDisplayValue("In Packaging queue");
+                case PACKAGING_PROGRESS -> obj.setDisplayValue("Packaging in progress");
+                case READY_FOR_DELIVERY -> obj.setDisplayValue("Waiting for delivery");
+                case DISPATCHED -> obj.setDisplayValue("Delivery in progress");
+                case DELIVERED -> obj.setDisplayValue("Delivery completed");
+            }
+            res.add(obj);
+        }
+        return res;
+    }
 }

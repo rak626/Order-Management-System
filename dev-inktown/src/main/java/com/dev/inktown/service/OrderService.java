@@ -5,29 +5,16 @@ import com.dev.inktown.entity.Customer;
 import com.dev.inktown.entity.Order;
 import com.dev.inktown.entity.OrderUpdateLog;
 import com.dev.inktown.mapper.CustomObjectMapper;
-<<<<<<< HEAD
-import com.dev.inktown.model.DisplayStatusResp;
-import com.dev.inktown.model.NewOrderRequestDto;
-import com.dev.inktown.model.OrderStatus;
-=======
 import com.dev.inktown.mapper.OrderOutputModelMapper;
-import com.dev.inktown.model.NewOrderRequestDto;
-import com.dev.inktown.model.OrderOutputModel;
->>>>>>> origin
-import com.dev.inktown.model.UpdateOrderStatusReqDto;
+import com.dev.inktown.model.*;
 import com.dev.inktown.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
-=======
->>>>>>> origin
 import java.util.List;
 import java.util.Optional;
-
-import static com.dev.inktown.mapper.OrderOutputModelMapper.orderToOrderOutputModelMapper;
 
 @Service
 public class OrderService implements StringConstant {
@@ -68,25 +55,27 @@ public class OrderService implements StringConstant {
         Optional<Order> prevSavedOrder = orderRepository.findById(updateOrderStatusReqDto.getOrderId());
         System.out.println("prev123" + prevSavedOrder.toString());
         if (prevSavedOrder.isPresent()) {
+            //Order update
             Order order = prevSavedOrder.get();
             order.setOrderStatus(updateOrderStatusReqDto.getStatus());
             order.setUserId(updateOrderStatusReqDto.getUserId());
             Order currSavedOrder = orderRepository.save(order);
+            //Order update log
             OrderUpdateLog orderUpdateLog = CustomObjectMapper.OrderUpdateLogFromOrder(currSavedOrder);
             orderUpdateLogService.saveOrderLog(orderUpdateLog);
+
             return currSavedOrder;
 
         }
         return new Order();
     }
 
-<<<<<<< HEAD
-    public List<DisplayStatusResp> getDisplayStatusList(){
+    public List<DisplayStatusResp> getDisplayStatusList() {
         List<DisplayStatusResp> res = new ArrayList<>();
-        for(OrderStatus os:OrderStatus.values()){
+        for (OrderStatus os : OrderStatus.values()) {
             DisplayStatusResp obj = new DisplayStatusResp();
             obj.setOrderStatus(os.getInternalId());
-            switch (os){
+            switch (os) {
                 case DESIGN_PENDING -> obj.setDisplayValue("In Design queue");
                 case DESIGN_PROGRESS -> obj.setDisplayValue("Design is in progress");
                 case PRINT_PENDING -> obj.setDisplayValue("In Printing queue");
@@ -100,11 +89,19 @@ public class OrderService implements StringConstant {
             res.add(obj);
         }
         return res;
-=======
+    }
+
     public List<OrderOutputModel> getAllOrder() {
         List<Order> orderList = orderRepository.findAll();
         return orderList.stream().map(OrderOutputModelMapper::orderToOrderOutputModelMapper).toList();
 
->>>>>>> origin
+    }
+
+    public List<OrderOutputModel> getOrdersByStatus(Integer orderStatus) {
+
+        List<Order> savedOrder = orderRepository.findAllByOrderStatus(OrderOutputModelMapper.findOrderStatus(orderStatus));
+
+        return savedOrder.stream().map(OrderOutputModelMapper::orderToOrderOutputModelMapper).toList();
+
     }
 }

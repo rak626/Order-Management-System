@@ -4,35 +4,22 @@ import com.dev.inktown.constant.StringConstant;
 import com.dev.inktown.entity.Customer;
 import com.dev.inktown.entity.Order;
 import com.dev.inktown.entity.OrderUpdateLog;
-import com.dev.inktown.mapper.CustomObjectMapper;
-<<<<<<< HEAD
-import com.dev.inktown.model.DisplayStatusResp;
-import com.dev.inktown.model.NewOrderRequestDto;
-import com.dev.inktown.model.OrderStatus;
-=======
-import com.dev.inktown.mapper.OrderOutputModelMapper;
-import com.dev.inktown.model.NewOrderRequestDto;
-import com.dev.inktown.model.OrderOutputModel;
->>>>>>> origin
-import com.dev.inktown.model.UpdateOrderStatusReqDto;
+import com.dev.inktown.mapper.ObjectMapper;
+import com.dev.inktown.model.*;
 import com.dev.inktown.repository.OrderRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
-import java.util.ArrayList;
-=======
->>>>>>> origin
-import java.util.List;
-import java.util.Optional;
-
-import static com.dev.inktown.mapper.OrderOutputModelMapper.orderToOrderOutputModelMapper;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class OrderService implements StringConstant {
     @Autowired
-    private OrderRepository orderRepository;
+    OrderRepository orderRepository;
     @Autowired
     CustomerService customerService;
 
@@ -46,19 +33,19 @@ public class OrderService implements StringConstant {
 
     @Transactional
     public Order createOrder(NewOrderRequestDto orderRequestDto) {
-        Order newOrder = CustomObjectMapper.OrderMapperFromNewOrderRequestDto(orderRequestDto);
-        newOrder.setUserId(INITIAL_STATUS);
-        Customer customer = CustomObjectMapper.CustomerMapperFromNewOrderRequestDto(orderRequestDto);
+        Order newOrder = ObjectMapper.orderMapperFromNewOrderRequestDto(orderRequestDto);
+        newOrder.setAssignedTo(DEFAULT_ASSIGNEE);
+        Customer customer = ObjectMapper.CustomerMapperFromNewOrderRequestDto(orderRequestDto);
         //call for save customer
         Customer savedCustomer = customerService.createCustomer(customer);
-        newOrder.setCustomerId(savedCustomer.getCustomerId());
+        newOrder.setCreatedBy(savedCustomer.getUniqueUserId());
         OrderUpdateLog orderUpdateLog = new OrderUpdateLog();
         //saving in order table
         var savedOrder = orderRepository.save(newOrder);
         //saving in updateLogtable
         orderUpdateLog.setOrderId(savedOrder.getOrderId());
         orderUpdateLog.setCurrentOrderStatus(savedOrder.getOrderStatus());
-        orderUpdateLog.setUpdatedBy(INITIAL_STATUS);
+        orderUpdateLog.setUpdatedBy(DEFAULT_ASSIGNEE);
         orderUpdateLogService.saveOrderLog(orderUpdateLog);
         return savedOrder;
     }
@@ -66,13 +53,12 @@ public class OrderService implements StringConstant {
     @Transactional
     public Order updateOrderStatus(UpdateOrderStatusReqDto updateOrderStatusReqDto) {
         Optional<Order> prevSavedOrder = orderRepository.findById(updateOrderStatusReqDto.getOrderId());
-        System.out.println("prev123" + prevSavedOrder.toString());
         if (prevSavedOrder.isPresent()) {
             Order order = prevSavedOrder.get();
-            order.setOrderStatus(updateOrderStatusReqDto.getStatus());
-            order.setUserId(updateOrderStatusReqDto.getUserId());
+            order.setOrderStatus(updateOrderStatusReqDto.getStatus().getInternalId());
+            order.setAssignedTo(updateOrderStatusReqDto.getUserId());
             Order currSavedOrder = orderRepository.save(order);
-            OrderUpdateLog orderUpdateLog = CustomObjectMapper.OrderUpdateLogFromOrder(currSavedOrder);
+            OrderUpdateLog orderUpdateLog = ObjectMapper.orderUpdateLogFromOrder(currSavedOrder);
             orderUpdateLogService.saveOrderLog(orderUpdateLog);
             return currSavedOrder;
 
@@ -80,13 +66,12 @@ public class OrderService implements StringConstant {
         return new Order();
     }
 
-<<<<<<< HEAD
-    public List<DisplayStatusResp> getDisplayStatusList(){
+    public List<DisplayStatusResp> getDisplayStatusList() {
         List<DisplayStatusResp> res = new ArrayList<>();
-        for(OrderStatus os:OrderStatus.values()){
+        for (OrderStatus os : OrderStatus.values()) {
             DisplayStatusResp obj = new DisplayStatusResp();
             obj.setOrderStatus(os.getInternalId());
-            switch (os){
+            switch (os) {
                 case DESIGN_PENDING -> obj.setDisplayValue("In Design queue");
                 case DESIGN_PROGRESS -> obj.setDisplayValue("Design is in progress");
                 case PRINT_PENDING -> obj.setDisplayValue("In Printing queue");
@@ -100,11 +85,41 @@ public class OrderService implements StringConstant {
             res.add(obj);
         }
         return res;
-=======
+    }
     public List<OrderOutputModel> getAllOrder() {
         List<Order> orderList = orderRepository.findAll();
-        return orderList.stream().map(OrderOutputModelMapper::orderToOrderOutputModelMapper).toList();
+        return orderList.stream().map(ObjectMapper::orderToOrderOutputModelMapper).toList();
 
->>>>>>> origin
+    }
+
+    public List<OrderUpdateLog> getOrderLog(String orderId){
+        return orderUpdateLogService.getOrderUpdateLogListForOrder(orderId);
+    }
+
+    public String getOrderTimeDetail(String orderId){
+        Order orderFromDb = getOrderById(orderId);
+        LocalDateTime createdTime = orderFromDb.getCreatedAt();
+        LocalDateTime lastModifiedtime = orderFromDb.getLastModifiedAt();
+        LocalDateTime currTime = LocalDateTime.now();
+        Duration elapsedTimeFromStart = Duration.between(createdTime,currTime);
+        Duration elapsedTimeFromLastUpdate = Duration.between(lastModifiedtime,currTime);
+        Map<String,String> res = new HashMap<>();
+        res.put("orderId",orderId);
+        res.put("timeElapsedFromStart",Long.toString(elapsedTimeFromStart.toMinutes()));
+        res.put("timeElapsedFromLastUpdate",Long.toString(elapsedTimeFromLastUpdate.toMinutes()));
+        try {
+            return new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(res);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public List<OrderOutputModel> getOrderListForEmployee(String userId){
+        List<Order> orderList = orderRepository.findByAssignedTo(userId);
+        return orderList.stream().map(ObjectMapper::orderToOrderOutputModelMapper).toList();
+    }
+    public List<OrderOutputModel> getOrderListForCust(String userId){
+
+        List<Order> orderList = orderRepository.findByCreatedBy(userId);
+        return orderList.stream().map(ObjectMapper::orderToOrderOutputModelMapper).toList();
     }
 }

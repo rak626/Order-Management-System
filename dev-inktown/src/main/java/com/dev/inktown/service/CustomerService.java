@@ -19,9 +19,15 @@ public class CustomerService {
     }
     public Customer createCustomer(Customer newCustomer){
 
+/*
         String customerName = newCustomer.getCustomerName();
         String customerPhn = newCustomer.getPhoneNo();
-        Optional<Customer> orderFindResult = customerRepository.findByCustomerNameAndPhoneNo(customerName,customerPhn);
-        return orderFindResult.orElseGet(() -> customerRepository.save(newCustomer));
+        Optional<Customer> optionalFindResult = customerRepository.findByCustomerNameAndPhoneNo(customerName,customerPhn);
+*/
+        String uniqueUserId = newCustomer.getUniqueUserId();
+        Optional<Customer> optionalFindResult = customerRepository.findByUniqueUserId(uniqueUserId);
+
+        return optionalFindResult.orElseGet(() -> customerRepository.save(newCustomer));
     }
+
 }

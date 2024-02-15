@@ -22,8 +22,8 @@ public class User {
     @Column(nullable = false)
     String userName;
 
-    @Column(nullable = false, columnDefinition = "varchar(255) default 'user'")
-    String userRole;
+    @Column(nullable = false)
+    int userRole;
 
     @CreationTimestamp
     LocalDateTime createdAt;

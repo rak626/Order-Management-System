@@ -1,7 +1,5 @@
 package com.dev.inktown.model;
 
-import com.dev.inktown.entity.Customer;
-import com.dev.inktown.entity.Order;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +14,5 @@ public class NewOrderRequestDto {
 //    private OrderStatus orderStatus;
     private String orderName;
     private Boolean isUrgent;
+    private String uniqueUserId;
 }

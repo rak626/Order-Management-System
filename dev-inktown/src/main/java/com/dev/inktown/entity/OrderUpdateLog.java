@@ -1,9 +1,9 @@
 package com.dev.inktown.entity;
 
-import com.dev.inktown.model.OrderStatus;
-import jakarta.persistence.*;
-import jakarta.transaction.TransactionScoped;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,7 +22,7 @@ public class OrderUpdateLog {
     @Column(unique = true, nullable = false)
     String id;
     String orderId;
-    OrderStatus currentOrderStatus;
+    int currentOrderStatus;
     String updatedBy;
     @CreationTimestamp
     LocalDateTime createdAt;

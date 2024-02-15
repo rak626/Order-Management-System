@@ -2,18 +2,11 @@ package com.dev.inktown.service;
 
 
 import com.dev.inktown.entity.User;
-import com.dev.inktown.entity.User;
+import com.dev.inktown.model.UserRole;
 import com.dev.inktown.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +14,11 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    CustomerService customerService;
+
+    @Autowired
+    OrderService orderService;
 
     public User getUserById(String userId){
         Optional<User> result = userRepository.findById(userId);
@@ -29,6 +27,24 @@ public class UserService {
     public User createUser(User newUser){
         return userRepository.save(newUser);
     }
+    public Object getOrdersForUser(String userId){
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isPresent()){
+            int role = optionalUser.get().getUserRole();
+            if(role==UserRole.CUST.getInternalId()){
+                return getOrdersForCustomer(userId);
+            }else{
+                return getOrdersForEmployee(userId);
+            }
+        }
+        return optionalUser;
+    }
+    public Object getOrdersForEmployee(String userId){
+        return orderService.getOrderListForEmployee(userId);
+    }
 
-   
+    public Object getOrdersForCustomer(String userId){
+        return orderService.getOrderListForCust(userId);
+    }
+
 }

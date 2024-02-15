@@ -12,13 +12,13 @@ public class OrderOutputModelMapper {
                 .orderId(order.getOrderId())
                 .orderName(order.getOrderName())
                 .orderDesc(order.getOrderDesc())
-                .orderStatus(order.getOrderStatus().getInternalId())
-                .assignedTo(order.getUserId())
+                .orderStatus(order.getOrderStatus())
+                .assignedTo(order.getAssignedTo())
                 .squareFeet(order.getSquareFeet())
                 .createdAt(order.getCreatedAt())
                 .isUrgent(order.getIsUrgent())
                 .lastModifiedAt(order.getLastModifiedAt())
-                .customerId(order.getCustomerId())
+                .createdBy(order.getCreatedBy())
                 .build();
     }
 

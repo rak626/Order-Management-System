@@ -4,7 +4,6 @@ import com.dev.inktown.constant.StringConstant;
 import com.dev.inktown.entity.Customer;
 import com.dev.inktown.entity.Order;
 import com.dev.inktown.entity.OrderUpdateLog;
-import com.dev.inktown.mapper.CustomObjectMapper;
 import com.dev.inktown.mapper.OrderOutputModelMapper;
 import com.dev.inktown.mapper.ObjectMapper;
 import com.dev.inktown.model.*;
@@ -67,7 +66,6 @@ public class OrderService implements StringConstant {
             order.setAssignedTo(updateOrderStatusReqDto.getUserId());
             Order currSavedOrder = orderRepository.save(order);
             //Order update log
-            OrderUpdateLog orderUpdateLog = CustomObjectMapper.OrderUpdateLogFromOrder(currSavedOrder);
             OrderUpdateLog orderUpdateLog = ObjectMapper.orderUpdateLogFromOrder(currSavedOrder);
             orderUpdateLogService.saveOrderLog(orderUpdateLog);
 
@@ -108,6 +106,7 @@ public class OrderService implements StringConstant {
         List<Order> savedOrder = orderRepository.findAllByOrderStatus(OrderOutputModelMapper.findOrderStatus(orderStatus));
 
         return savedOrder.stream().map(OrderOutputModelMapper::orderToOrderOutputModelMapper).toList();
+    }
     public List<OrderUpdateLog> getOrderLog(String orderId){
         return orderUpdateLogService.getOrderUpdateLogListForOrder(orderId);
     }

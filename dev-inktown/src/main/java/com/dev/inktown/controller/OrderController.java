@@ -1,6 +1,7 @@
 package com.dev.inktown.controller;
 
 import com.dev.inktown.entity.Order;
+import com.dev.inktown.model.*;
 import com.dev.inktown.entity.OrderUpdateLog;
 import com.dev.inktown.model.DisplayStatusResp;
 import com.dev.inktown.model.NewOrderRequestDto;
@@ -48,8 +49,14 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateOrderStatus(reqDto));
     }
 
+    @GetMapping("/getOrdersByStatus")
+    public ResponseEntity<List<OrderOutputModel>> getOrdersByStatus(@RequestParam(name = "orderStatus") Integer orderStatus) {
+        List<OrderOutputModel> savedOrder = orderService.getOrdersByStatus(orderStatus);
+        return ResponseEntity.ok(savedOrder);
+    }
+
     @GetMapping("/getDisplayStatusList")
-    public List<DisplayStatusResp> getDisplayStatusList(){
+    public List<DisplayStatusResp> getDisplayStatusList() {
         return orderService.getDisplayStatusList();
     }
 

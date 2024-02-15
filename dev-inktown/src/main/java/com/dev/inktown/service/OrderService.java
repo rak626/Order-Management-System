@@ -4,6 +4,8 @@ import com.dev.inktown.constant.StringConstant;
 import com.dev.inktown.entity.Customer;
 import com.dev.inktown.entity.Order;
 import com.dev.inktown.entity.OrderUpdateLog;
+import com.dev.inktown.mapper.CustomObjectMapper;
+import com.dev.inktown.mapper.OrderOutputModelMapper;
 import com.dev.inktown.mapper.ObjectMapper;
 import com.dev.inktown.model.*;
 import com.dev.inktown.repository.OrderRepository;
@@ -12,9 +14,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+
 
 @Service
 public class OrderService implements StringConstant {
@@ -54,12 +61,16 @@ public class OrderService implements StringConstant {
     public Order updateOrderStatus(UpdateOrderStatusReqDto updateOrderStatusReqDto) {
         Optional<Order> prevSavedOrder = orderRepository.findById(updateOrderStatusReqDto.getOrderId());
         if (prevSavedOrder.isPresent()) {
+            //Order update
             Order order = prevSavedOrder.get();
             order.setOrderStatus(updateOrderStatusReqDto.getStatus().getInternalId());
             order.setAssignedTo(updateOrderStatusReqDto.getUserId());
             Order currSavedOrder = orderRepository.save(order);
+            //Order update log
+            OrderUpdateLog orderUpdateLog = CustomObjectMapper.OrderUpdateLogFromOrder(currSavedOrder);
             OrderUpdateLog orderUpdateLog = ObjectMapper.orderUpdateLogFromOrder(currSavedOrder);
             orderUpdateLogService.saveOrderLog(orderUpdateLog);
+
             return currSavedOrder;
 
         }
@@ -92,6 +103,11 @@ public class OrderService implements StringConstant {
 
     }
 
+    public List<OrderOutputModel> getOrdersByStatus(Integer orderStatus) {
+
+        List<Order> savedOrder = orderRepository.findAllByOrderStatus(OrderOutputModelMapper.findOrderStatus(orderStatus));
+
+        return savedOrder.stream().map(OrderOutputModelMapper::orderToOrderOutputModelMapper).toList();
     public List<OrderUpdateLog> getOrderLog(String orderId){
         return orderUpdateLogService.getOrderUpdateLogListForOrder(orderId);
     }

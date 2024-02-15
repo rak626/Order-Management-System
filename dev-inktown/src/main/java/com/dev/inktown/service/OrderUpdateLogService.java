@@ -6,6 +6,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderUpdateLogService {
 
@@ -16,5 +18,12 @@ public class OrderUpdateLogService {
     @Transactional
     public void saveOrderLog(OrderUpdateLog logObject){
         orderUpdateLogRepository.save(logObject);
+    }
+    public List<OrderUpdateLog> getOrderUpdateLogListForUser(String userId){
+        return orderUpdateLogRepository.findByUpdatedBy(userId);
+    }
+
+    public List<OrderUpdateLog> getOrderUpdateLogListForOrder(String orderId){
+        return orderUpdateLogRepository.findByOrderIdOrderByCreatedAtDesc(orderId);
     }
 }

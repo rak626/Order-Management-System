@@ -29,4 +29,10 @@ public class UserController {
         User createdUser = userService.createUser(newUser);
         return ResponseEntity.ok(createdUser);
     }
+
+    @GetMapping("/getOrdersForUser/{userId}")
+    public Object getOrdersForUser(@PathVariable String userId){
+        return userService.getOrdersForUser(userId);
+
+    }
 }

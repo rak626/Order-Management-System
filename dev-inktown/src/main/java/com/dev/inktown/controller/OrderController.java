@@ -2,12 +2,16 @@ package com.dev.inktown.controller;
 
 import com.dev.inktown.entity.Order;
 import com.dev.inktown.model.*;
+import com.dev.inktown.entity.OrderUpdateLog;
+import com.dev.inktown.model.DisplayStatusResp;
+import com.dev.inktown.model.NewOrderRequestDto;
+import com.dev.inktown.model.OrderOutputModel;
+import com.dev.inktown.model.UpdateOrderStatusReqDto;
 import com.dev.inktown.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -55,4 +59,15 @@ public class OrderController {
     public List<DisplayStatusResp> getDisplayStatusList() {
         return orderService.getDisplayStatusList();
     }
+
+    @GetMapping("/getOrderTimeDetail/{orderId}")
+    public ResponseEntity<String> getOrderTimeDetail(@PathVariable String orderId){
+        return ResponseEntity.ok(orderService.getOrderTimeDetail(orderId));
+
+    }
+    @GetMapping("/getOrderLog/{orderId}")
+    public ResponseEntity<List<OrderUpdateLog>> getOrderLog(@PathVariable String orderId){
+        return ResponseEntity.ok(orderService.getOrderLog(orderId));
+    }
+
 }

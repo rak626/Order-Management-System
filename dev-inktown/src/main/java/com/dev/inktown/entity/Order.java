@@ -1,16 +1,15 @@
 package com.dev.inktown.entity;
 
-import com.dev.inktown.model.OrderStatus;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
-import org.springframework.data.jpa.repository.Query;
 
-import java.sql.Blob;
 import java.time.LocalDateTime;
 
 @Entity
@@ -33,16 +32,16 @@ public class Order {
     Long squareFeet;
 
     @Column(nullable = false)
-    OrderStatus orderStatus;
+    int orderStatus;
 
     @Column
     Boolean isUrgent;
 
     @Column(nullable = false)
-    String customerId;
+    String createdBy;
 
     @Column
-    String userId;
+    String assignedTo;
 
     @CreationTimestamp
     LocalDateTime createdAt;

@@ -102,9 +102,11 @@ public class OrderService implements StringConstant {
     }
 
     public List<OrderOutputModel> getOrdersByStatus(Integer orderStatus) {
-
-        List<Order> savedOrder = orderRepository.findAllByOrderStatus(OrderOutputModelMapper.findOrderStatus(orderStatus));
-
+//        if(orderStatus == -1){
+//            List<Order> allOrder = orderRepository.findAll();
+//            return allOrder.stream().map(OrderOutputModelMapper::orderToOrderOutputModelMapper).toList();
+//        }
+        List<Order> savedOrder = orderRepository.findAllByOrderStatus(orderStatus);
         return savedOrder.stream().map(OrderOutputModelMapper::orderToOrderOutputModelMapper).toList();
     }
     public List<OrderUpdateLog> getOrderLog(String orderId){

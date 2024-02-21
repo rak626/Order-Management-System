@@ -1,13 +1,13 @@
 package com.dev.inktown.controller;
 
 import com.dev.inktown.entity.Order;
-import com.dev.inktown.model.*;
 import com.dev.inktown.entity.OrderUpdateLog;
 import com.dev.inktown.model.DisplayStatusResp;
 import com.dev.inktown.model.NewOrderRequestDto;
 import com.dev.inktown.model.OrderOutputModel;
 import com.dev.inktown.model.UpdateOrderStatusReqDto;
 import com.dev.inktown.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +16,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/order")
+@Slf4j
 public class OrderController {
-    @Autowired
-    OrderService orderService;
+
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @GetMapping("test")
     public ResponseEntity<String> test() {
@@ -38,14 +43,14 @@ public class OrderController {
 
     @PostMapping("/create")
     public ResponseEntity<Order> createOrder(@RequestBody NewOrderRequestDto reqDto) {
-        System.out.println(reqDto);
+        log.info(String.valueOf(reqDto));
         Order createdOrder = orderService.createOrder(reqDto);
         return ResponseEntity.ok(createdOrder);
     }
 
     @PostMapping("/updateStatus")
     public ResponseEntity<Order> updateOrderStatus(@RequestBody UpdateOrderStatusReqDto reqDto) {
-        System.out.println("prev123" + reqDto.getStatus());
+        log.info("prev123" + reqDto.getStatus());
         return ResponseEntity.ok(orderService.updateOrderStatus(reqDto));
     }
 

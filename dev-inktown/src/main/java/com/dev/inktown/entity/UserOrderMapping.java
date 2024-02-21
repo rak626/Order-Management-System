@@ -16,5 +16,5 @@ public class UserOrderMapping {
     @Column(nullable = false)
     String userId;
     @Column(nullable = false)
-    String OrderId;
+    String orderId;
 }

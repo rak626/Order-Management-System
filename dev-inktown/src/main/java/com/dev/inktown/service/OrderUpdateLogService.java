@@ -3,7 +3,6 @@ package com.dev.inktown.service;
 import com.dev.inktown.entity.OrderUpdateLog;
 import com.dev.inktown.repository.OrderUpdateLogRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +10,12 @@ import java.util.List;
 @Service
 public class OrderUpdateLogService {
 
-    @Autowired
-    OrderUpdateLogRepository orderUpdateLogRepository;
+
+    private final OrderUpdateLogRepository orderUpdateLogRepository;
+
+    public OrderUpdateLogService(OrderUpdateLogRepository orderUpdateLogRepository) {
+        this.orderUpdateLogRepository = orderUpdateLogRepository;
+    }
 
 
     @Transactional

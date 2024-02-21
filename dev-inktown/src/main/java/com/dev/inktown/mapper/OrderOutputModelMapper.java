@@ -7,6 +7,8 @@ import com.dev.inktown.model.OrderStatus;
 
 public class OrderOutputModelMapper {
 
+    private OrderOutputModelMapper(){}
+
     public static OrderOutputModel orderToOrderOutputModelMapper(Order order) {
         return OrderOutputModel.builder()
                 .orderId(order.getOrderId())

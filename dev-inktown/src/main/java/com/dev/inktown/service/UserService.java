@@ -4,46 +4,51 @@ package com.dev.inktown.service;
 import com.dev.inktown.entity.User;
 import com.dev.inktown.model.UserRole;
 import com.dev.inktown.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 public class UserService {
-    @Autowired
-    UserRepository userRepository;
 
-    @Autowired
-    CustomerService customerService;
+    private final UserRepository userRepository;
 
-    @Autowired
-    OrderService orderService;
 
-    public User getUserById(String userId){
+    private final OrderService orderService;
+
+    public UserService(UserRepository userRepository, OrderService orderService) {
+        this.userRepository = userRepository;
+
+        this.orderService = orderService;
+    }
+
+    public User getUserById(String userId) {
         Optional<User> result = userRepository.findById(userId);
         return result.orElseGet(User::new);
     }
-    public User createUser(User newUser){
+
+    public User createUser(User newUser) {
         return userRepository.save(newUser);
     }
-    public Object getOrdersForUser(String userId){
+
+    public Object getOrdersForUser(String userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             int role = optionalUser.get().getUserRole();
-            if(role==UserRole.CUST.getInternalId()){
+            if (role == UserRole.CUST.getInternalId()) {
                 return getOrdersForCustomer(userId);
-            }else{
+            } else {
                 return getOrdersForEmployee(userId);
             }
         }
         return optionalUser;
     }
-    public Object getOrdersForEmployee(String userId){
+
+    public Object getOrdersForEmployee(String userId) {
         return orderService.getOrderListForEmployee(userId);
     }
 
-    public Object getOrdersForCustomer(String userId){
+    public Object getOrdersForCustomer(String userId) {
         return orderService.getOrderListForCust(userId);
     }
 

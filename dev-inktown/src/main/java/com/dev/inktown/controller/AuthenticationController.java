@@ -7,10 +7,7 @@ import com.dev.inktown.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/authentication")
@@ -21,7 +18,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     @PostMapping("/signUp")
-    public ResponseEntity<AuthenticationResp> signUp(@RequestBody SignupRequest signupRequest){
+    public ResponseEntity<AuthenticationResp> signUp(@RequestBody SignupRequest signupRequest) throws Exception {
         return ResponseEntity.ok(authenticationService.signUp(signupRequest));
     }
     @PostMapping("/signIn")
@@ -30,5 +27,10 @@ public class AuthenticationController {
 
         return authenticationService.signIn(signInRequest);
 
+    }
+
+    @GetMapping("test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Running");
     }
 }

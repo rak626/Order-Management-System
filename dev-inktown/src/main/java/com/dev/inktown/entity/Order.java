@@ -32,6 +32,21 @@ public class Order {
     Long squareFeet;
 
     @Column(nullable = false)
+    Long length;
+
+    @Column(nullable = false)
+    Long width;
+
+    @Column(nullable = false)
+    Boolean isEyelet;
+
+    @Column(nullable = false)
+    Long quantity;
+
+    @Column(nullable = false)
+    int quality;
+
+    @Column(nullable = false)
     int orderStatus;
 
     @Column

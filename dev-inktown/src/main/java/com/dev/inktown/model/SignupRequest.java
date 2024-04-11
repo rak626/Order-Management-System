@@ -14,4 +14,5 @@ public class SignupRequest {
     String userPhone;
     String password;
     Role role;
+    String userSecretKey;
 }

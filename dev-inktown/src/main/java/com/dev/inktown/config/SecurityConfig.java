@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 //                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/authentication/**")
+                        req.requestMatchers("/authentication/signUp")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()

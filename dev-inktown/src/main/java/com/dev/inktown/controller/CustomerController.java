@@ -1,9 +1,7 @@
 package com.dev.inktown.controller;
 
 import com.dev.inktown.entity.Customer;
-import com.dev.inktown.entity.Customer;
 import com.dev.inktown.service.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +12,12 @@ import java.util.List;
 @RequestMapping("/customer")
 public class CustomerController {
 
-    @Autowired
-    CustomerService customerService;
+    private final CustomerService customerService;
+
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
+
     @GetMapping("/getAll")
     public List<Customer> getAllCustomer(){
         return new ArrayList<>();

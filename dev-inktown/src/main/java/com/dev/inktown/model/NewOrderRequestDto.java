@@ -15,4 +15,9 @@ public class NewOrderRequestDto {
     private String orderName;
     private Boolean isUrgent;
     private String uniqueUserId;
+    private Long length;
+    private Long width;
+    private Boolean isEyelet;
+    private Long quantity;
+    private Integer quality;
 }

@@ -12,7 +12,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;@Configuration @RequiredArgsConstructor
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@RequiredArgsConstructor
 
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -27,8 +30,8 @@ public class SecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
 //                .cors(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req->
-                        req.requestMatchers("/authentication/signUp")
+                .authorizeHttpRequests(req ->
+                        req.requestMatchers("/authentication/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()

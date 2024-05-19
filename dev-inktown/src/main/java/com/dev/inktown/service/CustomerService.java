@@ -2,15 +2,18 @@ package com.dev.inktown.service;
 
 import com.dev.inktown.entity.Customer;
 import com.dev.inktown.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 public class CustomerService {
-    @Autowired
-    CustomerRepository customerRepository;
+
+    private final CustomerRepository customerRepository;
+
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
 
     public Customer getCustomerById(String customerId){

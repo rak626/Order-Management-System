@@ -4,18 +4,14 @@ import com.dev.inktown.constant.StringConstant;
 import com.dev.inktown.entity.Customer;
 import com.dev.inktown.entity.Order;
 import com.dev.inktown.entity.OrderUpdateLog;
-import com.dev.inktown.mapper.OrderOutputModelMapper;
 import com.dev.inktown.mapper.ObjectMapper;
+import com.dev.inktown.mapper.OrderOutputModelMapper;
 import com.dev.inktown.model.*;
 import com.dev.inktown.repository.OrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -135,7 +131,6 @@ public class OrderService implements StringConstant {
         return orderList.stream().map(ObjectMapper::orderToOrderOutputModelMapper).toList();
     }
     public List<OrderOutputModel> getOrderListForCust(String userId){
-
         List<Order> orderList = orderRepository.findByCreatedBy(userId);
         return orderList.stream().map(ObjectMapper::orderToOrderOutputModelMapper).toList();
     }

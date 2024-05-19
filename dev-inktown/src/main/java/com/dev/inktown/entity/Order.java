@@ -37,7 +37,7 @@ public class Order {
     @Column(nullable = false)
     Long width;
 
-    @Column(nullable = false)
+    @Column
     Boolean isEyelet;
 
     @Column(nullable = false)

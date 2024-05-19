@@ -32,6 +32,11 @@ public class ObjectMapper {
         if (reqDto.getOrderDesc() != null) {
             order.setOrderDesc(reqDto.getOrderDesc());
         }
+        order.setLength(reqDto.getLength());
+        order.setWidth(reqDto.getWidth());
+        order.setIsEyelet(reqDto.getIsEyelet());
+        order.setQuality(reqDto.getQuality());
+        order.setQuantity(reqDto.getQuantity());
         order.setOrderName(reqDto.getOrderName());
         order.setIsUrgent(reqDto.getIsUrgent());
         return order;

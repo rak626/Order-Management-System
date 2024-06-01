@@ -28,6 +28,10 @@ public class OrderService implements StringConstant {
     @Autowired
     OrderUpdateLogService orderUpdateLogService;
 
+    @Autowired
+    MessagingService messagingService;
+
+
     public Order getOrderById(String orderId) {
         Optional<Order> result = orderRepository.findById(orderId);
         return result.orElseGet(Order::new);

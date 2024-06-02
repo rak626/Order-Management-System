@@ -134,4 +134,9 @@ public class OrderService implements StringConstant {
         List<Order> orderList = orderRepository.findByCreatedBy(userId);
         return orderList.stream().map(ObjectMapper::orderToOrderOutputModelMapper).toList();
     }
+
+    public List<OrderOutputModel> getOrdersByStatusAndUserId(Integer orderStatus, String userId) {
+        List<Order> savedOrder = orderRepository.findAllByOrderStatusAndCreatedBy(orderStatus,userId);
+        return savedOrder.stream().map(OrderOutputModelMapper::orderToOrderOutputModelMapper).toList();
+    }
 }

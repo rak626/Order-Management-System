@@ -75,4 +75,12 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrderLog(orderId));
     }
 
+    // write a order controller name /getOrdersByStatusAndUserId like this
+     @GetMapping("/getOrdersByStatusAndUserId")
+     public ResponseEntity<List<OrderOutputModel>> getOrdersByStatusAndUserId(@RequestParam(name = "orderStatus") Integer orderStatus, @RequestParam(name = "userId") String userId) {
+         List<OrderOutputModel> savedOrder = orderService.getOrdersByStatusAndUserId(orderStatus, userId);
+         return ResponseEntity.ok(savedOrder);
+     }
+
+
 }
